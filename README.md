@@ -28,7 +28,7 @@ Synthetic mixtures will be generated at controlled SNR levels to enable quantita
 
 ## Planned Tasks
 
-- [ ] **Preprocess raw audio**  
+- [x] **Preprocess raw audio**  
   Normalize and resample clips for consistent analysis.
 
 - [ ] **Generate synthetic mixes**  
