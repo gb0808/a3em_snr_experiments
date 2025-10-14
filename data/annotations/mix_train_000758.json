@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_train_000758",
+  "split": "train",
+  "background_path": "data/processed/background/helicopter/3-154926-A-40.wav",
+  "transient_path": "data/processed/foreground/hen/3-171281-A-6.wav",
+  "target_snr_db": -5,
+  "onset_s": 2.244639227235907,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

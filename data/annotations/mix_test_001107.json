@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_test_001107",
+  "split": "test",
+  "background_path": "data/processed/background/helicopter/1-172649-B-40.wav",
+  "transient_path": "data/processed/foreground/dog/4-191687-A-0.wav",
+  "target_snr_db": 0,
+  "onset_s": 2.2957356764471974,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_val_000960",
+  "split": "val",
+  "background_path": "data/processed/background/insects/1-73585-A-7.wav",
+  "transient_path": "data/processed/foreground/sheep/1-57795-A-8.wav",
+  "target_snr_db": 5,
+  "onset_s": 1.9747867612689403,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

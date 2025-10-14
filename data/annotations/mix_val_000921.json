@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_val_000921",
+  "split": "val",
+  "background_path": "data/processed/background/crackling_fire/5-193473-A-12.wav",
+  "transient_path": "data/processed/foreground/pig/5-103420-A-2.wav",
+  "target_snr_db": -10,
+  "onset_s": 7.535129916649921,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

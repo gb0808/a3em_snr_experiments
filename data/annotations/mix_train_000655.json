@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_train_000655",
+  "split": "train",
+  "background_path": "data/processed/background/wind/3-246513-A-16.wav",
+  "transient_path": "data/processed/foreground/cow/2-103423-A-3.wav",
+  "target_snr_db": 0,
+  "onset_s": 2.6416446011430113,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

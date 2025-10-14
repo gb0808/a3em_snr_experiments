@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_val_000931",
+  "split": "val",
+  "background_path": "data/processed/background/helicopter/1-172649-B-40.wav",
+  "transient_path": "data/processed/foreground/frog/5-156026-D-4.wav",
+  "target_snr_db": 0,
+  "onset_s": 3.182330396730853,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

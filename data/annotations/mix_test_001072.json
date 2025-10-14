@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_test_001072",
+  "split": "test",
+  "background_path": "data/processed/background/thunderstorm/3-103051-C-19.wav",
+  "transient_path": "data/processed/foreground/hen/5-248341-B-6.wav",
+  "target_snr_db": 5,
+  "onset_s": 1.7023259288378485,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

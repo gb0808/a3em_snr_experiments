@@ -31,7 +31,7 @@ Synthetic mixtures will be generated at controlled SNR levels to enable quantita
 - [x] **Preprocess raw audio**  
   Normalize and resample clips for consistent analysis.
 
-- [ ] **Generate synthetic mixes**  
+- [x] **Generate synthetic mixes**  
   Create mixtures at SNR levels: **−10 dB, −5 dB, 0 dB, +5 dB**.
 
 - [ ] **Implement baseline enhancement methods**

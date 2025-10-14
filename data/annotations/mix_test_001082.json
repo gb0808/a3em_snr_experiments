@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_test_001082",
+  "split": "test",
+  "background_path": "data/processed/background/pouring_water/1-118559-A-17.wav",
+  "transient_path": "data/processed/foreground/frog/4-99644-D-4.wav",
+  "target_snr_db": -5,
+  "onset_s": 1.970899640627655,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

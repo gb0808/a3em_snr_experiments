@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_train_000651",
+  "split": "train",
+  "background_path": "data/processed/background/crackling_fire/1-46272-A-12.wav",
+  "transient_path": "data/processed/foreground/frog/1-31836-B-4.wav",
+  "target_snr_db": 0,
+  "onset_s": 1.170859637890965,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

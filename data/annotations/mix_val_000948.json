@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_val_000948",
+  "split": "val",
+  "background_path": "data/processed/background/pouring_water/3-145719-A-17.wav",
+  "transient_path": "data/processed/foreground/hen/5-248341-C-6.wav",
+  "target_snr_db": 5,
+  "onset_s": 7.6380926652225805,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}

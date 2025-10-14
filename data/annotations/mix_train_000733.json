@@ -1,0 +1,11 @@
+{
+  "mix_id": "mix_train_000733",
+  "split": "train",
+  "background_path": "data/processed/background/pouring_water/2-102414-B-17.wav",
+  "transient_path": "data/processed/foreground/pig/2-158746-A-2.wav",
+  "target_snr_db": -10,
+  "onset_s": 1.9190825082424654,
+  "duration_s": 10.0,
+  "sample_rate": 48000,
+  "seed": 42
+}
