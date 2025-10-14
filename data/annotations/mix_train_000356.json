@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/helicopter/4-175000-B-40.wav",
   "transient_path": "data/processed/foreground/frog/3-83527-A-4.wav",
   "target_snr_db": 5,
-  "onset_s": 3.4181407102434846,
-  "duration_s": 10.0,
+  "onset_s": 1.5579365607315245,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

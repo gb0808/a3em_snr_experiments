@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/thunderstorm/1-24524-B-19.wav",
   "transient_path": "data/processed/foreground/coughing/3-151212-A-24.wav",
   "target_snr_db": 0,
-  "onset_s": 7.662711197385507,
-  "duration_s": 10.0,
+  "onset_s": 3.4149361488561594,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

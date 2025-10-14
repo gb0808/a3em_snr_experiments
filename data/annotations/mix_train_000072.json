@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/wind/1-69760-A-16.wav",
   "transient_path": "data/processed/foreground/sheep/2-110614-B-8.wav",
   "target_snr_db": 5,
-  "onset_s": 1.4063911493002452,
-  "duration_s": 10.0,
+  "onset_s": 0.6777961278188573,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

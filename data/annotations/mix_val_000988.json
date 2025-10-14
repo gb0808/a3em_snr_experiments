@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/pouring_water/1-61221-A-17.wav",
   "transient_path": "data/processed/foreground/hen/3-164216-B-6.wav",
   "target_snr_db": 5,
-  "onset_s": 6.0260556998052515,
-  "duration_s": 10.0,
+  "onset_s": 2.6988993686647973,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/insects/5-194932-A-7.wav",
   "transient_path": "data/processed/foreground/frog/4-154793-A-4.wav",
   "target_snr_db": -10,
-  "onset_s": 2.2068886135651082,
-  "duration_s": 10.0,
+  "onset_s": 1.0280137684347348,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

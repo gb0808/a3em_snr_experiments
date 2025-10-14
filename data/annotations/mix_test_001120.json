@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/insects/3-105235-A-7.wav",
   "transient_path": "data/processed/foreground/pig/5-103418-A-2.wav",
   "target_snr_db": 5,
-  "onset_s": 5.64517200912203,
-  "duration_s": 10.0,
+  "onset_s": 2.532262753990888,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

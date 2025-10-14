@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/wind/2-109374-A-16.wav",
   "transient_path": "data/processed/foreground/coughing/4-155650-B-24.wav",
   "target_snr_db": -5,
-  "onset_s": 7.579338409814194,
-  "duration_s": 10.0,
+  "onset_s": 3.37846055429371,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

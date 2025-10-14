@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/pouring_water/2-102414-E-17.wav",
   "transient_path": "data/processed/foreground/dog/5-212454-A-0.wav",
   "target_snr_db": 0,
-  "onset_s": 1.2255003642252005,
-  "duration_s": 10.0,
+  "onset_s": 0.5986564093485252,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

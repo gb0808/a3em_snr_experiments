@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/crackling_fire/5-186924-A-12.wav",
   "transient_path": "data/processed/foreground/sheep/3-140199-A-8.wav",
   "target_snr_db": -10,
-  "onset_s": 4.771814943851509,
-  "duration_s": 10.0,
+  "onset_s": 2.150169037935035,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

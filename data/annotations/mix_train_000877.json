@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/pouring_water/2-126433-A-17.wav",
   "transient_path": "data/processed/foreground/sheep/3-197408-A-8.wav",
   "target_snr_db": -10,
-  "onset_s": 7.505478270518408,
-  "duration_s": 10.0,
+  "onset_s": 3.3461467433518033,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

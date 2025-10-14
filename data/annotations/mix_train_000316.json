@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/rain/2-81731-A-10.wav",
   "transient_path": "data/processed/foreground/coughing/2-85292-A-24.wav",
   "target_snr_db": 5,
-  "onset_s": 4.954452028927376,
-  "duration_s": 10.0,
+  "onset_s": 2.230072762655727,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }

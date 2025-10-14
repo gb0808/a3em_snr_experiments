@@ -4,8 +4,8 @@
   "background_path": "data/processed/background/thunderstorm/2-39945-A-19.wav",
   "transient_path": "data/processed/foreground/sheep/4-188703-D-8.wav",
   "target_snr_db": 0,
-  "onset_s": 8.421382086755582,
-  "duration_s": 10.0,
+  "onset_s": 3.746854662955567,
+  "duration_s": 5.0,
   "sample_rate": 48000,
   "seed": 42
 }
