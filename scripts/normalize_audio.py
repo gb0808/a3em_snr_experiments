@@ -1,13 +1,3 @@
-"""
-normalize_audio_multithreaded.py
---------------------------------
-Normalize all WAV files under data/raw → data/processed using multithreading.
-Supports peak or RMS normalization.
-
-Usage:
-    python normalize_audio_multithreaded.py [--num-workers 8]
-"""
-
 import os
 import argparse
 from pathlib import Path
