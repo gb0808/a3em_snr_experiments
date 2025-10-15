@@ -41,26 +41,6 @@ Synthetic mixtures will be generated at controlled SNR levels to enable quantita
 
 ---
 
-## Repository Structure (planned)
-```
-snr-enhancement/
-├─ data/
-│  ├─ raw/             # Original ESC-50 audio
-│  ├─ processed/       # Normalized/resampled clips
-│  └─ mixes/           # Synthetic mixtures at target SNRs
-├─ code/
-│  ├─ preprocessing/
-│  ├─ enhancement/
-│  └─ evaluation/
-├─ results/
-│  ├─ metrics/
-│  └─ visualizations/
-└─ README.md
-```
-
-
----
-
 ## Future Work
 - Evaluate enhancement quality using SNR and SDR metrics.  
 - Compare classical and deep learning approaches (e.g., CRNN or U-Net models).  
