@@ -57,7 +57,7 @@ Let $X(f,t)$ be the STFT of the noisy signal, $N(f)$ be the estimaed noise spect
 
 A simple spectral gate is:
 
-$\hat{X}(f,t)=\begin{cases}X(f,t), \;\;\;\; |{X(f,t)}|>T(f)\\\beta X(f,t), \;\; |{X(f,t)}|\leq T(f)\end{cases}$
+$\hat{X}(f,t)=\begin{cases}X(f,t), |{X(f,t)}|>T(f)\\\beta X(f,t), |{X(f,t)}|\leq T(f)\end{cases}$
 
 where $ \alpha$ is a multiplier for sensitivity and $\beta$ is the attenuation factor.
 
