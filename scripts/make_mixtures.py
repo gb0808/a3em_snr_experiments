@@ -1,31 +1,13 @@
-"""
-make_mixtures_fixed.py
-----------------------
-Generate 5-second synthetic mixtures of transients + backgrounds
-at controlled SNRs. Supports optional random onset timing.
-
-Usage:
-    python make_mixtures_fixed.py [--random-onset]
-
-Inputs:
-    data/processed/background/*.wav
-    data/processed/foreground/*.wav
-
-Outputs:
-    data/mixes/{split}/mix_<split>_<id>_snr_<dB>.wav
-    data/annotations/*.json
-    data/annotations/mix_manifest.csv
-"""
-
 import os
 import json
 import random
 import csv
-import argparse
 from pathlib import Path
 import numpy as np
 import soundfile as sf
 import librosa
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Lock
 
 # ------------------------------------------------------------
 # Configuration
@@ -41,7 +23,11 @@ TARGET_SNRS_DB = [-10, -5, 0, 5]
 MIX_DURATION_S = 5.0
 SAMPLE_RATE = 48000
 SEED = 42
+NUM_WORKERS = 8  # threads
 random.seed(SEED)
+
+print_lock = Lock()
+csv_lock = Lock()
 
 # ------------------------------------------------------------
 # Utility functions
@@ -67,24 +53,86 @@ def pad_or_trim(y, target_len):
     return y
 
 # ------------------------------------------------------------
+# Mixture generation for a single combination
+# ------------------------------------------------------------
+def create_mixture(split, mix_id, tr_path, bg_path, snr_db, writer):
+    try:
+        # Output paths
+        mix_name = f"mix_{split}_{mix_id:06d}_snr_{snr_db:+d}.wav"
+        out_path = MIXES_DIR / split / mix_name
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Load audio
+        tr_y, _ = librosa.load(tr_path, sr=SAMPLE_RATE, mono=True)
+        bg_y, _ = librosa.load(bg_path, sr=SAMPLE_RATE, mono=True)
+
+        # Pad or trim both to same length
+        target_len = int(MIX_DURATION_S * SAMPLE_RATE)
+        tr_y = pad_or_trim(tr_y, target_len)
+        bg_y = pad_or_trim(bg_y, target_len)
+
+        # Mix at target SNR
+        tr_scaled = set_snr(tr_y, bg_y, snr_db)
+        mix = bg_y + tr_scaled
+
+        # Normalize and write
+        mix = mix / np.max(np.abs(mix)) * 0.99
+        sf.write(out_path, mix, SAMPLE_RATE)
+
+        # Metadata
+        meta = {
+            "mix_id": f"mix_{split}_{mix_id:06d}",
+            "split": split,
+            "background_path": str(bg_path),
+            "transient_path": str(tr_path),
+            "target_snr_db": snr_db,
+            "duration_s": MIX_DURATION_S,
+            "sample_rate": SAMPLE_RATE,
+            "seed": SEED,
+        }
+
+        json_path = ANNOTATIONS_DIR / f"{meta['mix_id']}.json"
+        with open(json_path, "w") as jf:
+            json.dump(meta, jf, indent=2)
+
+        # Write CSV row safely
+        with csv_lock:
+            writer.writerow({
+                "mix_id": meta["mix_id"],
+                "split": split,
+                "mix_path": str(out_path),
+                "background_id": bg_path.stem,
+                "transient_id": tr_path.stem,
+                "target_snr_db": snr_db,
+                "duration_s": MIX_DURATION_S,
+                "sample_rate": SAMPLE_RATE,
+                "seed": SEED
+            })
+
+        with print_lock:
+            print(f"✅ {mix_name} created")
+
+    except Exception as e:
+        with print_lock:
+            print(f"❌ Error in {mix_name}: {e}")
+
+# ------------------------------------------------------------
 # Main mixing logic
 # ------------------------------------------------------------
-def generate_mixtures(random_onset=False):
+def generate_mixtures():
     background = list((PROCESSED_DIR / "background").rglob("*.wav"))
     foreground = list((PROCESSED_DIR / "foreground").rglob("*.wav"))
     assert background and foreground, "No background or foreground files found."
 
-    total_combos = len(foreground) * len(TARGET_SNRS_DB)
     print(f"Found {len(background)} backgrounds and {len(foreground)} foregrounds.")
-    print(f"Generating mixtures at SNRs: {TARGET_SNRS_DB} dB")
-    print(f"Onset mode: {'randomized' if random_onset else 'fixed (2.0 s)'}")
+    print(f"Generating mixtures at SNRs: {TARGET_SNRS_DB} dB using {NUM_WORKERS} threads")
+    print("Onset mode: fixed overlay (no offset)")
 
-    # Create output directories
     for split in SPLITS:
         (MIXES_DIR / split).mkdir(parents=True, exist_ok=True)
     ANNOTATIONS_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Split data indices
+    # Assign foreground files to splits
     num_foreground = len(foreground)
     indices = list(range(num_foreground))
     random.shuffle(indices)
@@ -100,90 +148,34 @@ def generate_mixtures(random_onset=False):
     with open(manifest_path, "w", newline="") as csvfile:
         fieldnames = [
             "mix_id", "split", "mix_path", "background_id", "transient_id",
-            "target_snr_db", "onset_s", "duration_s", "sample_rate", "seed"
+            "target_snr_db", "duration_s", "sample_rate", "seed"
         ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
 
+        # Submit mixture jobs
+        futures = []
         mix_id = 0
-        for split, idxs in split_assignments.items():
-            for i in idxs:
-                tr_path = foreground[i]
-                bg_path = random.choice(background)
-                for snr_db in TARGET_SNRS_DB:
-                    mix_id += 1
-                    mix_name = f"mix_{split}_{mix_id:06d}_snr_{snr_db:+d}.wav"
-                    out_path = MIXES_DIR / split / mix_name
+        with ThreadPoolExecutor(max_workers=NUM_WORKERS) as executor:
+            for split, idxs in split_assignments.items():
+                for i in idxs:
+                    tr_path = foreground[i]
+                    bg_path = random.choice(background)
+                    for snr_db in TARGET_SNRS_DB:
+                        mix_id += 1
+                        futures.append(executor.submit(
+                            create_mixture, split, mix_id, tr_path, bg_path, snr_db, writer
+                        ))
 
-                    # Load audio
-                    tr_y, _ = librosa.load(tr_path, sr=SAMPLE_RATE, mono=True)
-                    bg_y, _ = librosa.load(bg_path, sr=SAMPLE_RATE, mono=True)
+            # Wait for all to finish
+            for _ in as_completed(futures):
+                pass
 
-                    # Ensure both 5 s long
-                    target_len = int(MIX_DURATION_S * SAMPLE_RATE)
-                    tr_y = pad_or_trim(tr_y, target_len)
-                    bg_y = pad_or_trim(bg_y, target_len)
-
-                    # Choose onset
-                    if random_onset:
-                        onset_s = random.uniform(0.5, 4.0)
-                    else:
-                        onset_s = 2.0
-                    onset_idx = int(onset_s * SAMPLE_RATE)
-
-                    # Overlay transient
-                    mix = bg_y.copy()
-                    end_idx = min(onset_idx + len(tr_y), len(bg_y))
-                    tr_seg = tr_y[: end_idx - onset_idx]
-                    bg_seg = bg_y[onset_idx:end_idx]
-                    tr_scaled = set_snr(tr_seg, bg_seg, snr_db)
-                    mix[onset_idx:end_idx] += tr_scaled
-
-                    # Normalize output
-                    mix = mix / np.max(np.abs(mix)) * 0.99
-                    sf.write(out_path, mix, SAMPLE_RATE)
-
-                    # Write metadata JSON
-                    meta = {
-                        "mix_id": f"mix_{split}_{mix_id:06d}",
-                        "split": split,
-                        "background_path": str(bg_path),
-                        "transient_path": str(tr_path),
-                        "target_snr_db": snr_db,
-                        "onset_s": onset_s,
-                        "duration_s": MIX_DURATION_S,
-                        "sample_rate": SAMPLE_RATE,
-                        "seed": SEED,
-                    }
-                    json_path = ANNOTATIONS_DIR / f"{meta['mix_id']}.json"
-                    with open(json_path, "w") as jf:
-                        json.dump(meta, jf, indent=2)
-
-                    writer.writerow({
-                        "mix_id": meta["mix_id"],
-                        "split": split,
-                        "mix_path": str(out_path),
-                        "background_id": bg_path.stem,
-                        "transient_id": tr_path.stem,
-                        "target_snr_db": snr_db,
-                        "onset_s": onset_s,
-                        "duration_s": MIX_DURATION_S,
-                        "sample_rate": SAMPLE_RATE,
-                        "seed": SEED
-                    })
-                    print(f"✅ {mix_name} created")
-
-    print(f"\n🎯 All mixtures generated successfully!")
+    print("\n🎯 All mixtures generated successfully!")
     print(f"Manifest saved to: {manifest_path}")
 
 # ------------------------------------------------------------
 # CLI entry point
 # ------------------------------------------------------------
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate synthetic mixtures.")
-    parser.add_argument("--random-onset", action="store_true",
-                        help="Randomize transient onset times (default: fixed 2.0 s).")
-    args = parser.parse_args()
-
-    generate_mixtures(random_onset=args.random_onset)
-
+    generate_mixtures()
