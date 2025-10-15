@@ -69,12 +69,13 @@ snr-enhancement/
 ---
 
 ## Status
-*Project initialization phase — data preprocessing in progress.*
+*Enhancement implementation in progress.*
 
 ## Notes
 ### Spectral Gates
 Let $X(f,t)$ be the STFT of the noisy signal, $N(f)$ be the estimaed noise spectrum, and $T(f) = \alpha N(f)$ be the threshold.
 
 A simple spectral gate is:
-$$\hat{X}(f,t)=\begin{cases}X(f,t), \abs{X(f,t)}>T(f)
+$$\hat{X}(f,t)=\begin{cases}X(f,t), \;\;\;\; |{X(f,t)}|>T(f)\\\beta X(f,t), \;\; |{X(f,t)}|\leq T(f)\end{cases}$$
+where $ \alpha$ is a multiplier for sensitivity and $\beta$ is the attenuation factor.
 
