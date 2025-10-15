@@ -7,11 +7,11 @@ from pathlib import Path
 from tqdm import tqdm
 
 ANNOTATIONS_DIR = Path("data/annotations")
-MIXES_DIR = Path("data/mixes/test")
-RESULT_DIR = Path("results/spectral-gates")
-CSV_PATH = RESULT_DIR / "snr_improvement.csv"
-
-RESULT_DIR.mkdir(parents=True, exist_ok=True)
+MIXES_DIR = Path("data/mixes/train")
+RESULT_DIRS = { 
+    "spectral-gates": Path("results/spectral-gates"), 
+    "median-filter": Path("results/median-filter")
+}
 
 
 # ------------------------------------------------------------
@@ -49,45 +49,48 @@ def compute_snr_improvement(clean_path, noisy_path, denoised_path):
 # Main
 # ------------------------------------------------------------
 def main():
-    json_files = sorted(ANNOTATIONS_DIR.glob("mix_test_*.json"))
+    json_files = sorted(ANNOTATIONS_DIR.glob("mix_train_*.json"))
     if not json_files:
         raise FileNotFoundError("No test annotation JSON files found in data/annotations/")
 
     print(f"Evaluating {len(json_files)} test mixtures...\n")
 
-    results = []
-    for json_path in tqdm(json_files):
-        with open(json_path) as f:
-            meta = json.load(f)
+    for name, dir in RESULT_DIRS.items():
+        dir.mkdir(parents=True, exist_ok=True)
+        CSV_PATH = Path(f"results/{name}-snr-improvement.csv")
+        results = []
+        for json_path in tqdm(json_files):
+            with open(json_path) as f:
+                meta = json.load(f)
 
-        mix_id = meta["mix_id"]
-        snr_db = meta["target_snr_db"]
-        clean_path = Path(meta["transient_path"])
-        noisy_path = MIXES_DIR / f"{mix_id}_snr_{snr_db:+d}.wav"
-        denoised_path = RESULT_DIR / f"{mix_id}_snr_{snr_db:+d}.wav"
+            mix_id = meta["mix_id"]
+            snr_db = meta["target_snr_db"]
+            clean_path = Path(meta["transient_path"])
+            noisy_path = MIXES_DIR / f"{mix_id}_snr_{snr_db:+d}.wav"
+            denoised_path = dir / f"{mix_id}_snr_{snr_db:+d}.wav"
 
-        if not (clean_path.exists() and noisy_path.exists() and denoised_path.exists()):
-            continue
+            if not (clean_path.exists() and noisy_path.exists() and denoised_path.exists()):
+                continue
 
-        snr_before, snr_after, improvement = compute_snr_improvement(
-            clean_path, noisy_path, denoised_path
-        )
+            snr_before, snr_after, improvement = compute_snr_improvement(
+                clean_path, noisy_path, denoised_path
+            )
 
-        results.append({
-            "mix_id": mix_id,
-            "target_snr_db": snr_db,
-            "snr_before_db": snr_before,
-            "snr_after_db": snr_after,
-            "snr_improvement_db": improvement,
-            "clean_path": str(clean_path),
-            "noisy_path": str(noisy_path),
-            "denoised_path": str(denoised_path),
-        })
+            results.append({
+                "mix_id": mix_id,
+                "target_snr_db": snr_db,
+                "snr_before_db": snr_before,
+                "snr_after_db": snr_after,
+                "snr_improvement_db": improvement,
+                "clean_path": str(clean_path),
+                "noisy_path": str(noisy_path),
+                "denoised_path": str(denoised_path),
+            })
 
-    df = pd.DataFrame(results)
-    df.to_csv(CSV_PATH, index=False)
-    print(f"\n✅ SNR evaluation complete. Results saved to: {CSV_PATH}")
-    print(df.head())
+        df = pd.DataFrame(results)
+        df.to_csv(CSV_PATH, index=False)
+        print(f"\n✅ SNR evaluation complete. Results saved to: {CSV_PATH}")
+        print(df.head())
 
 
 if __name__ == "__main__":

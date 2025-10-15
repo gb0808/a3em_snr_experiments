@@ -8,7 +8,7 @@ from tqdm import tqdm
 # ============================================================
 # 🔧 CONFIG
 # ============================================================
-TEST_DIR = "data/mixes/test"
+TEST_DIR = "data/mixes/train"
 RESULT_DIR = "results/spectral-gates"
 
 os.makedirs(RESULT_DIR, exist_ok=True)
