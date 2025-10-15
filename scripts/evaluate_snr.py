@@ -10,7 +10,13 @@ ANNOTATIONS_DIR = Path("data/annotations")
 MIXES_DIR = Path("data/mixes/train")
 RESULT_DIRS = { 
     "spectral-gates": Path("results/spectral-gates"), 
-    "median-filter": Path("results/median-filter")
+    "median-filter": Path("results/median-filter"),
+    "wavelet-denoise-coif5-hard": Path("results/wavelet-denoise-coif5-hard"),
+    "wavelet-denoise-coif5-soft": Path("results/wavelet-denoise-coif5-soft"),
+    "wavelet-denoise-db8-hard": Path("results/wavelet-denoise-db8-hard"),
+    "wavelet-denoise-db8-soft": Path("results/wavelet-denoise-db8-soft"),
+    "wavelet-denoise-sym5-hard": Path("results/wavelet-denoise-sym5-hard"),
+    "wavelet-denoise-sym5-soft": Path("results/wavelet-denoise-sym5-soft")
 }
 
 
