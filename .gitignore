@@ -1,1 +1,5 @@
 venv
+results/
+data/processed
+data/annotations
+data/mixes
